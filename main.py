@@ -1,6 +1,8 @@
 import sys  # Importerer sys modulet, som giver adgang til systemspecifikke funktioner og variabler.
 from PySide6.QtCore import QDateTime, QTimer  # Importerer QDateTime og QTimer klasserne fra PySide6.QtCore modulet.
-from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QRadioButton, QWidget  # Importerer nødvendige klasser fra PySide6.QtWidgets modulet.
+from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QRadioButton, \
+    QWidget  # Importerer nødvendige klasser fra PySide6.QtWidgets modulet.
+
 
 class SkærmForbrugsApp(QMainWindow):  # Definerer en ny klasse, der arver fra QMainWindow.
     def __init__(self):  # Konstruktørmetoden for klassen.
@@ -59,24 +61,27 @@ class SkærmForbrugsApp(QMainWindow):  # Definerer en ny klasse, der arver fra Q
     def togglePause(self):  # Metode til at starte og stoppe pause-timeren.
         if not self.pause_timer.isActive():  # Hvis pause-timeren ikke kører.
             self.pause_timer.start(1000)  # Starter pause-timeren med en timeout på 1000 ms (1 sekund).
-            self.pause_timer.timeout.connect(self.opdaterPauseTid)  # Forbinder timeout-signalet til opdaterPauseTid-metoden.
+            self.pause_timer.timeout.connect(
+                self.opdaterPauseTid)  # Forbinder timeout-signalet til opdaterPauseTid-metoden.
             self.score_timer.start(1000)  # Starter score-timeren med en timeout på 1000 ms (1 sekund).
         else:  # Hvis pause-timeren kører.
             self.pause_timer.stop()  # Stopper pause-timeren.
             self.score_timer.stop()  # Stopper score-timeren.
 
     def opdaterPauseTid(self):  # Metode til at opdatere pause-tiden.
-        self.pause_tid += 1/2  # Øger pause-tiden med 0.5 sekunder.
+        self.pause_tid += 1 / 2  # Øger pause-tiden med 0.5 sekunder.
         self.pause_tid_label.setText(f'{self.pause_tid} sekunder')  # Opdaterer etiketten med den nye pause-tid.
 
     def opdaterScore(self):  # Metode til at opdatere scoren.
-        self.score += 1/2  # Øger scoren med 0.5. så hver andet sekund er 1 point
+        self.score += 1 / 2  # Øger scoren med 0.5. så hver andet sekund er 1 point
         self.score_label.setText(f'Score: {self.score}')  # Opdaterer etiketten med den nye score.
 
     def opdaterSkærmTid(self):  # Metode til at opdatere skærmens tid.
         nuværende_tid = QDateTime.currentDateTime()  # Henter den aktuelle dato og tid.
-        gået_tid = self.start_tid.secsTo(nuværende_tid) + self.total_skærm_tid  # Beregner tiden, der er gået siden start_tid.
-        self.skærm_forbrug_label.setText(f'Skærmforbrug: {gået_tid} sekunder')  # Opdaterer etiketten med skærmforbrugstiden.
+        gået_tid = self.start_tid.secsTo(
+            nuværende_tid) + self.total_skærm_tid  # Beregner tiden, der er gået siden start_tid.
+        self.skærm_forbrug_label.setText(
+            f'Skærmforbrug: {gået_tid} sekunder')  # Opdaterer etiketten med skærmforbrugstiden.
 
     def visSkærmForbrug(self):  # Metode til at vise skærmforbrug.
         if self.sidste_knap_tryk_tid is None:  # Hvis sidste_knap_tryk_tid er None (dvs. første gang knappen trykkes).
@@ -84,7 +89,8 @@ class SkærmForbrugsApp(QMainWindow):  # Definerer en ny klasse, der arver fra Q
             self.sidste_knap_tryk_tid = self.start_tid  # Gemmer start_tid som sidste_knap_tryk_tid.
             self.opdaterSkærmTid()  # Opdaterer skærmforbrugstiden.
         else:  # Hvis knappen har været trykket før.
-            self.total_skærm_tid += self.sidste_knap_tryk_tid.secsTo(QDateTime.currentDateTime())  # Beregner tiden, der er gået siden sidste knaptryk.
+            self.total_skærm_tid += self.sidste_knap_tryk_tid.secsTo(
+                QDateTime.currentDateTime())  # Beregner tiden, der er gået siden sidste knaptryk.
             self.sidste_knap_tryk_tid = QDateTime.currentDateTime()  # Opdaterer sidste_knap_tryk_tid med den aktuelle dato og tid.
             self.opdaterSkærmTid()  # Opdaterer skærmforbrugstiden.
 
@@ -96,7 +102,8 @@ class SkærmForbrugsApp(QMainWindow):  # Definerer en ny klasse, der arver fra Q
         self.rydQuizUI()  # Rydder quiz-brugergrænsefladen.
         spørgsmål, svarmuligheder = self.getNæsteSpørgsmål()  # Henter det næste spørgsmål og dets svarmuligheder.
 
-        spørgsmål_label = QLabel(f'Spørgsmål {self.nuværende_spørgsmål_index}: {spørgsmål}', self)  # Opretter en etiket med spørgsmålet.
+        spørgsmål_label = QLabel(f'Spørgsmål {self.nuværende_spørgsmål_index}: {spørgsmål}',
+                                 self)  # Opretter en etiket med spørgsmålet.
         self.quiz_layout.addWidget(spørgsmål_label)  # Tilføjer spørgsmåls etiketten til layoutet.
 
         for svar in svarmuligheder:  # Gennemgår alle svarmulighederne.
@@ -114,9 +121,19 @@ class SkærmForbrugsApp(QMainWindow):  # Definerer en ny klasse, der arver fra Q
 
     def getNæsteSpørgsmål(self):  # Metode til at hente det næste spørgsmål og dets svarmuligheder.
         spørgsmål = f'Har du intense trang til skærmtid? {self.nuværende_spørgsmål_index + 1}'  # Opretter et spørgsmål.
-        svarmuligheder = [f'Svarmulighed {i}' for i in range(1, 5)]  # Opretter fire svarmuligheder.
+
+        # Definerer hver svarmulighed.
+        svarmulighed_1 = 'Svarmulighed 1'
+        svarmulighed_2 = 'Svarmulighed 2'
+        svarmulighed_3 = 'Svarmulighed 3'
+        svarmulighed_4 = 'Svarmulighed 4'
+
+        # Samler svarmulighederne i en liste.
+        svarmuligheder = [svarmulighed_1, svarmulighed_2, svarmulighed_3, svarmulighed_4]
+
         self.nuværende_spørgsmål_index += 1  # Opdaterer index til det næste spørgsmål.
         return spørgsmål, svarmuligheder  # Returnerer spørgsmålet og svarmulighederne.
+
 
 if __name__ == '__main__':  # Starter hovedprogrammet.
     app = QApplication(sys.argv)  # Opretter en QApplication-instans.
